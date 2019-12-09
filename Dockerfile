@@ -10,9 +10,10 @@ RUN apk add --no-cache \
 RUN pip install awscli
 
 ENV AWS_DEFAULT_REGION=ap-northeast-1
+
 COPY ./cron_job.sh /cron_job.sh
-RUN echo '* * * * * /cron_job.sh'  >> /etc/crontabs/root
+COPY run_server.sh /run_server.sh
+COPY nginx.conf /etc/nginx/nginx.conf
+RUN  mkdir /var/log/nginx/backup
 
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT "/entrypoint.sh"
-
+CMD ["sh","/run_server.sh"]
